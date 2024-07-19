@@ -2,23 +2,18 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
+  mode: 'development', // Ensure this is set correctly
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
+        use: 'babel-loader',
       },
       {
         test: /\.css$/,
@@ -37,5 +32,6 @@ module.exports = {
     },
     compress: true,
     port: 3000,
+    historyApiFallback: true, // Ensures correct handling of client-side routing
   },
 };
