@@ -8,10 +8,16 @@ import showBrowseJobsPage from './components/BrowseJobsPage';
 const app = document.getElementById('app');
 
 function initialize() {
-  app.innerHTML = '';
-  app.appendChild(createNavBar());
-  const initialPage = window.location.pathname === '/' ? 'home' : window.location.pathname.replace('/', '');
-  navigateTo(initialPage);
+  window.addEventListener('popstate', () => {
+    const path = window.location.pathname.replace('/', '');
+    navigateTo(path);
+  });
+
+  if (window.location.pathname === '/') {
+    navigateTo('home');
+  } else {
+    navigateTo(window.location.pathname.replace('/', ''));
+  }
 }
 
 window.addEventListener('popstate', () => {

@@ -3,26 +3,31 @@ import showBrowseJobsPage from './components/BrowseJobsPage';
 import showProfilePage from './components/ProfilePage';
 import showLoginPage from './components/LoginPage';
 import showRegisterPage from './components/RegisterPage';
+import showJobDetailsPage from './components/JobDetailsPage';
+import showSavedJobsPage from './components/SavedJobsPage';
+import logoutUser from './components/LogoutUser';
 
-export async function fetchJobs(params) {
+export async function fetchJobs(params = {}) {
+  const { featured, what = 'developer', where = '' } = params;
   let query = 'http://localhost:4000/api/jobs';
-  if (params.featured) {
-    query += '?featured=true';
+  if (featured) {
+    query += '/get-featured';
   } else {
-    query += `?what=${encodeURIComponent(params.what || 'developer')}&where=${encodeURIComponent(params.where || '')}`;
+    query += `?what=${encodeURIComponent(what)}&where=${encodeURIComponent(where)}`;
   }
   try {
     const response = await fetch(query);
     if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    return data.results;
+    return data || [];
   } catch (error) {
     console.error('Error fetching jobs:', error);
     return [];
   }
 }
+
 
 export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
@@ -46,21 +51,20 @@ export function displayJobs(jobs, containerId) {
   });
 }
 
-
-
-export async function fetchAndDisplayJobs() {
-  const searchInput = document.getElementById('search-input').value;
-  const jobs = await fetchJobs({ what: searchInput, where: '' });
+export async function fetchAndDisplayJobs(params = {}) {
+  const jobs = await fetchJobs(params);
   displayJobs(jobs, 'jobs');
 }
 
-export function navigateTo(page) {
+export function navigateTo(page, param = {}) {
   console.log(`Navigating to: ${page}`);
-  window.history.pushState({}, page, `/${page}`);
+  window.history.pushState({}, page, `/${page}${param ? `?${new URLSearchParams(param).toString()}` : ''}`);
   if (page === 'home') {
     showHomePage();
   } else if (page === 'browse-jobs') {
-    showBrowseJobsPage();
+    showBrowseJobsPage(param);
+  } else if (page === 'job-details') {
+    showJobDetailsPage(param);
   } else if (page === 'saved-jobs') {
     showSavedJobsPage();
   } else if (page === 'profile') {
@@ -73,6 +77,7 @@ export function navigateTo(page) {
     logoutUser();
   }
 }
+
 
 export function showJobDetails(job) {
   const modal = document.createElement('div');
@@ -95,9 +100,6 @@ export function showJobDetails(job) {
     document.body.removeChild(modal);
   });
 }
-
-
-
 
 export function saveJob(job) {
   alert(`Job Saved:\nTitle: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}`);
