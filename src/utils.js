@@ -28,7 +28,6 @@ export async function fetchJobs(params = {}) {
   }
 }
 
-
 export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
   jobsContainer.innerHTML = '';
@@ -51,9 +50,16 @@ export function displayJobs(jobs, containerId) {
   });
 }
 
-export async function fetchAndDisplayJobs(params = {}) {
+export async function fetchAndDisplayJobs(params = {}, isSearch = false) {
   const jobs = await fetchJobs(params);
   displayJobs(jobs, 'jobs');
+  
+  if (isSearch) {
+    const searchMessage = document.getElementById('search-message');
+    const searchTerm = params.what ? params.what : 'jobs';
+    const locationTerm = params.where ? `${params.where}` : '';
+    searchMessage.innerHTML = `<p>${jobs.length} results for <span style="color: blue;">${searchTerm}</span> in ${locationTerm ? `<span style="color: blue;">${locationTerm}</span>` : ''}</p>`;
+  }
 }
 
 export function navigateTo(page, param = {}) {
@@ -77,7 +83,6 @@ export function navigateTo(page, param = {}) {
     logoutUser();
   }
 }
-
 
 export function showJobDetails(job) {
   const modal = document.createElement('div');
