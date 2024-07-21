@@ -1,6 +1,6 @@
-import { fetchAndDisplayJobs } from '../utils';
+import { fetchJobs, displayJobs, navigateTo } from '../utils';
 
-export default async function showBrowseJobsPage(params = {}) {
+export default async function showBrowseJobsPage(params) {
   console.log('Showing browse jobs page');
   const app = document.getElementById('app');
   app.innerHTML = `
@@ -14,11 +14,17 @@ export default async function showBrowseJobsPage(params = {}) {
     <div id="jobs" class="jobs-container"></div>
   `;
 
-  document.getElementById('search-button').addEventListener('click', () => {
+  document.getElementById('search-button').addEventListener('click', async () => {
     const searchInput = document.getElementById('search-input').value;
     const locationInput = document.getElementById('location-input').value;
-    fetchAndDisplayJobs({ what: searchInput, where: locationInput }, true);
+    navigateTo('browse-jobs', { what: searchInput, where: locationInput });
   });
 
-  await fetchAndDisplayJobs(params);
+  const jobs = await fetchJobs(params);
+  displayJobs(jobs, 'jobs');
+
+  if (params.what || params.where) {
+    const message = `${jobs.length} results for <span class="highlight">${params.what}</span> in <span class="highlight">${params.where}</span>`;
+    document.getElementById('search-message').innerHTML = message;
+  }
 }

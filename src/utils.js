@@ -1,10 +1,10 @@
 import showHomePage from './components/HomePage';
 import showBrowseJobsPage from './components/BrowseJobsPage';
+import showJobDetailsPage from './components/JobDetailsPage';
+import showSavedJobsPage from './components/SavedJobsPage';
 import showProfilePage from './components/ProfilePage';
 import showLoginPage from './components/LoginPage';
 import showRegisterPage from './components/RegisterPage';
-import showJobDetailsPage from './components/JobDetailsPage';
-import showSavedJobsPage from './components/SavedJobsPage';
 import logoutUser from './components/LogoutUser';
 
 export async function fetchJobs(params = {}) {
@@ -41,36 +41,26 @@ export function displayJobs(jobs, containerId) {
       <p>Company: ${company}</p>
       <p>Location: ${location}</p>
       <p>Description: ${job.description}</p>
-      <button class="details-button" data-id="${job.id}">Details</button>
       <button class="save-button" data-id="${job.id}">Save</button>
     `;
-    jobCard.querySelector('.details-button').addEventListener('click', () => showJobDetails(job));
-    jobCard.querySelector('.save-button').addEventListener('click', () => saveJob(job));
+    jobCard.addEventListener('click', () => navigateTo('job-details', job));
+    jobCard.querySelector('.save-button').addEventListener('click', (e) => {
+      e.stopPropagation();
+      saveJob(job);
+    });
     jobsContainer.appendChild(jobCard);
   });
 }
 
-export async function fetchAndDisplayJobs(params = {}, isSearch = false) {
-  const jobs = await fetchJobs(params);
-  displayJobs(jobs, 'jobs');
-  
-  if (isSearch) {
-    const searchMessage = document.getElementById('search-message');
-    const searchTerm = params.what ? params.what : 'jobs';
-    const locationTerm = params.where ? `${params.where}` : '';
-    searchMessage.innerHTML = `<p>${jobs.length} results for <span style="color: blue;">${searchTerm}</span> in ${locationTerm ? `<span style="color: blue;">${locationTerm}</span>` : ''}</p>`;
-  }
-}
-
-export function navigateTo(page, param = {}) {
+export function navigateTo(page, params = {}) {
   console.log(`Navigating to: ${page}`);
-  window.history.pushState({}, page, `/${page}${param ? `?${new URLSearchParams(param).toString()}` : ''}`);
+  window.history.pushState({}, page, `/${page}`);
   if (page === 'home') {
     showHomePage();
   } else if (page === 'browse-jobs') {
-    showBrowseJobsPage(param);
+    showBrowseJobsPage(params);
   } else if (page === 'job-details') {
-    showJobDetailsPage(param);
+    showJobDetailsPage(params);
   } else if (page === 'saved-jobs') {
     showSavedJobsPage();
   } else if (page === 'profile') {
@@ -82,28 +72,6 @@ export function navigateTo(page, param = {}) {
   } else if (page === 'logout') {
     logoutUser();
   }
-}
-
-export function showJobDetails(job) {
-  const modal = document.createElement('div');
-  modal.className = 'modal';
-  const company = job.company ? (job.company.display_name || job.company) : 'N/A';
-  const location = job.location ? (job.location.display_name || job.location) : 'N/A';
-  modal.innerHTML = `
-    <div class="modal-content">
-      <span class="close-button">&times;</span>
-      <h2>${job.title}</h2>
-      <p>Company: ${company}</p>
-      <p>Location: ${location}</p>
-      <p>Description: ${job.description}</p>
-    </div>
-  `;
-  document.body.appendChild(modal);
-
-  const closeButton = modal.querySelector('.close-button');
-  closeButton.addEventListener('click', () => {
-    document.body.removeChild(modal);
-  });
 }
 
 export function saveJob(job) {

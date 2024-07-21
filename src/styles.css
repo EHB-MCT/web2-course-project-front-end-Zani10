@@ -88,3 +88,22 @@ form {
 form label, form input, form button {
   margin-bottom: 10px;
 }
+
+.job-card {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.job-card:hover {
+  transform: scale(1.005);
+}
+
+.search-message {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.search-message .highlight {
+  color: blue;
+  font-weight: bold;
+}
