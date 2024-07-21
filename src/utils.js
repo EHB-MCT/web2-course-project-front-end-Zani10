@@ -7,6 +7,36 @@ import showLoginPage from './components/LoginPage';
 import showRegisterPage from './components/RegisterPage';
 import logoutUser from './components/LogoutUser';
 
+export function displayJobs(jobs, containerId) {
+  const jobsContainer = document.getElementById(containerId);
+  jobsContainer.innerHTML = '';
+  jobs.forEach(job => {
+    const jobCard = document.createElement('div');
+    jobCard.className = 'job-card';
+    const company = job.company ? (job.company.display_name || job.company) : 'N/A';
+    const location = job.location ? (job.location.display_name || job.location) : 'N/A';
+    const logoUrl = getCompanyLogoUrl(company);
+    jobCard.innerHTML = `
+      <img src="${logoUrl}" alt="Company Logo" class="company-logo">
+      <h3>${job.title}</h3>
+      <p>Company: ${company}</p>
+      <p>Location: ${location}</p>
+      <p>Description: ${job.description}</p>
+    `;
+    jobCard.addEventListener('click', () => {
+      navigateTo('job-details', { job, logoUrl });
+    });
+    jobsContainer.appendChild(jobCard);
+  });
+}
+
+export function getCompanyLogoUrl(companyName) {
+  const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
+  const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
+  return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
+}
+
+
 export async function fetchJobs(params = {}) {
   const { featured, what = 'developer', where = '' } = params;
   let query = 'http://localhost:4000/api/jobs';
@@ -28,39 +58,15 @@ export async function fetchJobs(params = {}) {
   }
 }
 
-export function displayJobs(jobs, containerId) {
-  const jobsContainer = document.getElementById(containerId);
-  jobsContainer.innerHTML = '';
-  jobs.forEach(job => {
-    const jobCard = document.createElement('div');
-    jobCard.className = 'job-card';
-    const company = job.company ? (job.company.display_name || job.company) : 'N/A';
-    const location = job.location ? (job.location.display_name || job.location) : 'N/A';
-    jobCard.innerHTML = `
-      <h3>${job.title}</h3>
-      <p>Company: ${company}</p>
-      <p>Location: ${location}</p>
-      <p>Description: ${job.description}</p>
-      <button class="save-button" data-id="${job.id}">Save</button>
-    `;
-    jobCard.addEventListener('click', () => navigateTo('job-details', job));
-    jobCard.querySelector('.save-button').addEventListener('click', (e) => {
-      e.stopPropagation();
-      saveJob(job);
-    });
-    jobsContainer.appendChild(jobCard);
-  });
-}
-
-export function navigateTo(page, params = {}) {
+export function navigateTo(page, param = {}) {
   console.log(`Navigating to: ${page}`);
-  window.history.pushState({}, page, `/${page}`);
+  window.history.pushState({}, page, `/${page}${param ? `?${new URLSearchParams(param).toString()}` : ''}`);
   if (page === 'home') {
     showHomePage();
   } else if (page === 'browse-jobs') {
-    showBrowseJobsPage(params);
+    showBrowseJobsPage(param);
   } else if (page === 'job-details') {
-    showJobDetailsPage(params);
+    showJobDetailsPage(param);
   } else if (page === 'saved-jobs') {
     showSavedJobsPage();
   } else if (page === 'profile') {

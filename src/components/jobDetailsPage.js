@@ -26,7 +26,16 @@ export default async function showJobDetailsPage(params) {
     </div>
   `;
 
-  const job = params;
+  let job = params.job;
+  const logoUrl = params.logoUrl;
+  
+  if (!job) {
+    console.error('Job details not found');
+    return;
+  }
+
+  console.log('Job Details:', job);
+
   const companyName = job.company?.display_name || 'N/A';
   const jobTitle = job.title || 'N/A';
   const jobLocation = job.location?.display_name || 'N/A';
@@ -35,10 +44,11 @@ export default async function showJobDetailsPage(params) {
   const jobDescription = job.description || 'N/A';
 
   const companyLogoElement = document.getElementById('company-logo');
-  const companyLogoUrl = getCompanyLogoUrl(companyName);
-  companyLogoElement.src = companyLogoUrl;
+  companyLogoElement.src = logoUrl;
   companyLogoElement.onerror = () => {
-    companyLogoElement.src = 'default-logo.png'; // Ensure you have a default-logo.png in your project
+    if (!companyLogoElement.src.includes('default-logo.png')) {
+      companyLogoElement.src = 'default-logo.png'; // Ensure you have a default-logo.png in your project
+    }
   };
 
   document.getElementById('job-title').innerText = jobTitle;
@@ -55,6 +65,8 @@ export default async function showJobDetailsPage(params) {
   document.getElementById('save-button').addEventListener('click', () => {
     saveJob(job);
   });
+
+  localStorage.setItem(`job-${job.id}`, JSON.stringify(job));
 }
 
 function calculateDaysAgo(dateString) {
@@ -63,10 +75,4 @@ function calculateDaysAgo(dateString) {
   const differenceInTime = today - datePosted;
   const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
   return `${differenceInDays} days ago`;
-}
-
-function getCompanyLogoUrl(companyName) {
-  const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
-  const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
-  return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
 }
