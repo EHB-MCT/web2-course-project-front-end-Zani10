@@ -1,12 +1,12 @@
-import { displayJobs, navigateTo } from '../utils';
+import { fetchJobs, displayJobs, navigateTo } from '../utils';
 
 export default function showHomePage() {
   console.log('Showing home page');
   const app = document.getElementById('app');
   app.innerHTML = `
-    <h1>Featured Jobs</h1>
+    <h2>Featured</h2>
     <div id="featured-jobs" class="jobs-container"></div>
-    <button id="view-more">View More</button>
+    <button id="view-more">View more</button>
   `;
 
   document.getElementById('view-more').addEventListener('click', () => navigateTo('browse-jobs'));

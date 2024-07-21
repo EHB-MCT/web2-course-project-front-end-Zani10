@@ -13,15 +13,28 @@ export function displayJobs(jobs, containerId) {
   jobs.forEach(job => {
     const jobCard = document.createElement('div');
     jobCard.className = 'job-card';
-    const company = job.company ? (job.company.display_name || job.company) : 'N/A';
-    const location = job.location ? (job.location.display_name || job.location) : 'N/A';
+    const company = job.company ? (job.company.display_name || job.company) : 'Not available';
+    const location = job.location ? (job.location.display_name || job.location) : 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
+    const description = job.description || 'No description available';
+    const postedDate = job.created ? calculateDaysAgo(job.created) : 'Not available';
+
     jobCard.innerHTML = `
-      <img src="${logoUrl}" alt="Company Logo" class="company-logo">
-      <h3>${job.title}</h3>
-      <p>Company: ${company}</p>
-      <p>Location: ${location}</p>
-      <p>Description: ${job.description}</p>
+      <div class="job-header">
+        <h3>${job.title}</h3>
+        <img src="${logoUrl}" alt="Company Logo" class="company-logo">
+      </div>
+      <div class="job-info">
+        <div class="job-info-item"><i class="fas fa-building"></i>${company}</div>
+        <div class="job-info-item"><i class="fas fa-map-marker-alt"></i>${location}</div>
+      </div>
+      <div class="job-description">
+        <p>${description}</p>
+      </div>
+      <div class="job-actions">
+        <span>Posted ${postedDate}</span>
+        <button class="btn"><i class="fas fa-heart"></i></button>
+      </div>
     `;
     jobCard.addEventListener('click', () => {
       navigateTo('job-details', { job, logoUrl });
@@ -34,6 +47,14 @@ export function getCompanyLogoUrl(companyName) {
   const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
   const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
   return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
+}
+
+function calculateDaysAgo(dateString) {
+  const datePosted = new Date(dateString);
+  const today = new Date();
+  const differenceInTime = today - datePosted;
+  const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
+  return `${differenceInDays} days ago`;
 }
 
 
