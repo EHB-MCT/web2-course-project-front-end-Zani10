@@ -76,3 +76,4 @@ function calculateDaysAgo(dateString) {
   const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
   return `${differenceInDays} days ago`;
 }
+

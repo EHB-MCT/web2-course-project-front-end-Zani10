@@ -33,12 +33,21 @@ export function displayJobs(jobs, containerId) {
       </div>
       <div class="job-actions">
         <span>Posted ${postedDate}</span>
-        <button class="btn"><i class="fas fa-heart"></i></button>
+        <button class="btn save-button"><i class="far fa-heart"></i></button>
       </div>
     `;
     jobCard.addEventListener('click', () => {
       navigateTo('job-details', { job, logoUrl });
     });
+
+    const saveButton = jobCard.querySelector('.save-button');
+    saveButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      saveJob(job);
+      saveButton.querySelector('i').classList.toggle('fas');
+      saveButton.querySelector('i').classList.toggle('far');
+    });
+
     jobsContainer.appendChild(jobCard);
   });
 }
@@ -56,6 +65,7 @@ function calculateDaysAgo(dateString) {
   const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
   return `${differenceInDays} days ago`;
 }
+
 
 
 export async function fetchJobs(params = {}) {
