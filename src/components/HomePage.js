@@ -11,8 +11,7 @@ export default function showHomePage() {
 
   document.getElementById('view-more').addEventListener('click', () => navigateTo('browse-jobs'));
 
-  fetch('http://localhost:4000/api/jobs/get-featured')
-    .then(response => response.json())
+  fetchJobs({ featured: true })
     .then(jobs => {
       console.log('Fetched featured jobs:', jobs);
       if (jobs.length === 0) {

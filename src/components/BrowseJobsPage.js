@@ -1,19 +1,18 @@
-import { fetchJobs, displayJobs, navigateTo } from '../utils';
+import { fetchJobs, displayJobs } from '../utils';
 
 export default async function showBrowseJobsPage(params) {
   console.log('Showing browse jobs page');
   const app = document.getElementById('app');
   app.innerHTML = `
-    <h1>Browse Jobs</h1>
-    <div id="search-message" class="search-message"></div>
-    <div id="jobs" class="jobs-container"></div>
+    <h2>Browse Jobs</h2>
+    <div id="browse-jobs" class="jobs-container"></div>
   `;
 
-  const jobs = await fetchJobs(params);
-  displayJobs(jobs, 'jobs');
-
-  if (params.what || params.where) {
-    const message = `${jobs.length} results for <span class="highlight">${params.what}</span> in <span class="highlight">${params.where}</span>`;
-    document.getElementById('search-message').innerHTML = message;
+  try {
+    const jobs = await fetchJobs(params);
+    displayJobs(jobs, 'browse-jobs');
+  } catch (error) {
+    console.error('Error fetching jobs:', error);
+    document.getElementById('browse-jobs').innerHTML = '<p>Error fetching jobs. Please try again later.</p>';
   }
 }

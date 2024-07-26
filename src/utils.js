@@ -13,11 +13,11 @@ export function displayJobs(jobs, containerId) {
   jobs.forEach(job => {
     const jobCard = document.createElement('div');
     jobCard.className = 'job-card';
-    const company = job.company ? (job.company.display_name || job.company) : 'Not available';
-    const location = job.location ? (job.location.display_name || job.location) : 'Not available';
+    const company = job.company.display_name || job.company || 'Not available';
+    const location = job.location.display_name || job.location || 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
     const description = job.description || 'No description available';
-    const postedDate = job.created ? calculateDaysAgo(job.created) : 'Not available';
+    const postedDate = job.created || job.created_at ? calculateDaysAgo(job.created || job.created_at) : 'Not available';
 
     jobCard.innerHTML = `
       <div class="job-header">
@@ -53,6 +53,7 @@ export function displayJobs(jobs, containerId) {
 }
 
 export function getCompanyLogoUrl(companyName) {
+  if (typeof companyName !== 'string') return '';
   const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
   const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
   return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
@@ -65,8 +66,6 @@ function calculateDaysAgo(dateString) {
   const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
   return `${differenceInDays} days ago`;
 }
-
-
 
 export async function fetchJobs(params = {}) {
   const { featured, what = 'developer', where = '' } = params;
@@ -88,6 +87,7 @@ export async function fetchJobs(params = {}) {
     return [];
   }
 }
+
 
 export function navigateTo(page, param = {}) {
   console.log(`Navigating to: ${page}`);
