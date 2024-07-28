@@ -10,9 +10,10 @@ import logoutUser from './components/LogoutUser';
 export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
   jobsContainer.innerHTML = '';
+  const isHomepage = containerId === 'homepage-featured-jobs';
   jobs.forEach(job => {
     const jobCard = document.createElement('div');
-    jobCard.className = 'job-card';
+    jobCard.className = isHomepage ? 'homepage-job-card' : 'job-card';
     const company = job.company.display_name || job.company || 'Not available';
     const location = job.location.display_name || job.location || 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
@@ -22,7 +23,7 @@ export function displayJobs(jobs, containerId) {
     jobCard.innerHTML = `
       <div class="job-header">
         <h3>${job.title}</h3>
-        <img src="${logoUrl}" alt="Company Logo" class="company-logo">
+        <img src="${logoUrl}" alt="Company Logo" class="company-logo ${isHomepage ? 'homepage-company-logo' : ''}">
       </div>
       <div class="job-info">
         <div class="job-info-item"><i class="fas fa-building"></i>${company}</div>
@@ -51,6 +52,7 @@ export function displayJobs(jobs, containerId) {
     jobsContainer.appendChild(jobCard);
   });
 }
+
 
 export function getCompanyLogoUrl(companyName) {
   if (typeof companyName !== 'string') return '';

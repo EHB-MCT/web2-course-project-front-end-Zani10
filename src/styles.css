@@ -134,12 +134,19 @@ nav ul li a {
   justify-content: center;
 }
 
-.job-card {
+.homepage-jobs-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.homepage-job-card {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  width: calc(50% - 10px); /* Two cards per row */
+  width: calc(45% - 10px); /* Two cards per row */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
@@ -147,12 +154,27 @@ nav ul li a {
   position: relative;
 }
 
-.job-card h3 {
+.job-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  width: calc(100% - 20px); /* Full width for other pages */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.job-card h3,
+.homepage-job-card h3 {
   font-size: 1.2em;
   margin: 0;
 }
 
-.company-logo {
+.company-logo,
+.homepage-company-logo {
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -163,38 +185,38 @@ nav ul li a {
   object-fit: cover;
 }
 
-.job-card p {
+.job-card p,
+.homepage-job-card p {
   margin: 5px 0;
   font-size: 0.9em;
 }
 
-.job-card .job-info {
+.job-info,
+.homepage-job-info {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
 
-.job-card .job-info-item {
-  display: flex;
-  align-items: center;
-  color: #286DB1; /* Only the icons should be blue */
-}
-
-.job-card .job-info-item i {
+.job-info-item i,
+.homepage-job-info-item i {
   margin-right: 8px;
   color: #286DB1; /* Ensure only the icons are blue */
 }
 
-.job-card .job-info-item p {
+.job-info-item p,
+.homepage-job-info-item p {
   color: black; /* Ensure the text color is black */
 }
 
-.job-description {
+.job-description,
+.homepage-job-description {
   margin: 10px 0;
   flex-grow: 1;
 }
 
-.job-description p {
+.job-description p,
+.homepage-job-description p {
   margin: 0;
   font-size: 0.9em;
   overflow: hidden;
@@ -204,28 +226,33 @@ nav ul li a {
   -webkit-box-orient: vertical;
 }
 
-.job-actions {
+.job-actions,
+.homepage-job-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.job-actions .btn {
+.job-actions .btn,
+.homepage-job-actions .btn {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 1.2em;
 }
 
-.job-actions .btn i {
+.job-actions .btn i,
+.homepage-job-actions .btn i {
   color: #286DB1;
 }
 
-.job-actions .btn.saved i {
+.job-actions .btn.saved i,
+.homepage-job-actions .btn.saved i {
   color: #e74c3c;
 }
 
-#view-more {
+#view-more,
+.homepage-view-more {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
@@ -237,6 +264,7 @@ nav ul li a {
   font-size: 1em;
 }
 
-#view-more:hover {
+#view-more:hover,
+.homepage-view-more:hover {
   background-color: #1b4b7a;
 }
