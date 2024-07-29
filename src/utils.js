@@ -10,10 +10,9 @@ import logoutUser from './components/LogoutUser';
 export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
   jobsContainer.innerHTML = '';
-  const isHomepage = containerId === 'homepage-featured-jobs';
   jobs.forEach(job => {
     const jobCard = document.createElement('div');
-    jobCard.className = isHomepage ? 'homepage-job-card' : 'job-card';
+    jobCard.className = 'job-card';
     const company = job.company.display_name || job.company || 'Not available';
     const location = job.location.display_name || job.location || 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
@@ -23,7 +22,7 @@ export function displayJobs(jobs, containerId) {
     jobCard.innerHTML = `
       <div class="job-header">
         <h3>${job.title}</h3>
-        <img src="${logoUrl}" alt="Company Logo" class="company-logo ${isHomepage ? 'homepage-company-logo' : ''}">
+        <img src="${logoUrl}" alt="Company Logo" class="company-logo">
       </div>
       <div class="job-info">
         <div class="job-info-item"><i class="fas fa-building"></i>${company}</div>
@@ -52,7 +51,6 @@ export function displayJobs(jobs, containerId) {
     jobsContainer.appendChild(jobCard);
   });
 }
-
 
 export function getCompanyLogoUrl(companyName) {
   if (typeof companyName !== 'string') return '';
@@ -90,7 +88,6 @@ export async function fetchJobs(params = {}) {
   }
 }
 
-
 export function navigateTo(page, param = {}) {
   console.log(`Navigating to: ${page}`);
   window.history.pushState({}, page, `/${page}${param ? `?${new URLSearchParams(param).toString()}` : ''}`);
@@ -113,6 +110,142 @@ export function navigateTo(page, param = {}) {
   }
 }
 
-export function saveJob(job) {
-  alert(`Job Saved:\nTitle: ${job.title}\nCompany: ${job.company}\nLocation: ${job.location}`);
+export async function saveJob(job) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    navigateTo('login');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:4000/api/users/saved-jobs', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(job),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save job');
+    }
+
+    alert('Job saved successfully');
+  } catch (error) {
+    console.error('Error saving job:', error);
+    alert('Failed to save job. Please try again.');
+  }
+}
+
+export async function getSavedJobs() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token, authorization denied');
+  }
+
+  try {
+    const response = await fetch('http://localhost:4000/api/users/saved-jobs', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch saved jobs');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function removeSavedJob(jobId) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token, authorization denied');
+  }
+
+  try {
+    const response = await fetch(`http://localhost:4000/api/users/saved-jobs/${jobId}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to remove saved job');
+    }
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function loginUser(email, password) {
+  try {
+    const response = await fetch('http://localhost:4000/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+  } catch (error) {
+    throw new Error('Login failed');
+  }
+}
+
+export async function registerUser(name, email, password) {
+  try {
+    const response = await fetch('http://localhost:4000/api/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, password }),
+    });
+    if (!response.ok) {
+      throw new Error('Registration failed');
+    }
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+  } catch (error) {
+    throw new Error('Registration failed');
+  }
+}
+
+export function isAuthenticated() {
+  const token = localStorage.getItem('token');
+  return !!token;
+}
+
+export async function getUserProfile() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token, authorization denied');
+  }
+  try {
+    const response = await fetch('http://localhost:4000/api/users/profile', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch profile');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 }

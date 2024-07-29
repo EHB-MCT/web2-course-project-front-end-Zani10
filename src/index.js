@@ -1,9 +1,13 @@
 import './styles.css';
 import createNavBar from './components/Navbar';
-import { navigateTo } from './utils';
+import { navigateTo, isAuthenticated } from './utils';
 import showHomePage from './components/HomePage';
 import showBrowseJobsPage from './components/BrowseJobsPage';
 import showJobDetailsPage from './components/JobDetailsPage';
+import showSavedJobsPage from './components/SavedJobsPage';
+import showProfilePage from './components/ProfilePage';
+import showLoginPage from './components/LoginPage';
+import showRegisterPage from './components/RegisterPage';
 
 const app = document.getElementById('app');
 
@@ -27,13 +31,15 @@ function renderPage() {
     } else if (path === 'saved-jobs') {
       showSavedJobsPage();
     } else if (path === 'profile') {
-      showProfilePage();
+      if (isAuthenticated()) {
+        showProfilePage();
+      } else {
+        navigateTo('login');
+      }
     } else if (path === 'login') {
       showLoginPage();
     } else if (path === 'register') {
       showRegisterPage();
-    } else if (path === 'logout') {
-      logoutUser();
     } else {
       showHomePage();
     }
