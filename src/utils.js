@@ -130,7 +130,7 @@ export async function saveJob(job) {
   }
 
   const jobToSave = {
-    jobId: job.id || job.jobId, // Adjust to ensure jobId is included
+    jobId: job.id || job.jobId, // Ensure jobId is included
     title: job.title,
     company: job.company.display_name || job.company,
     location: job.location.display_name || job.location,
@@ -158,6 +158,7 @@ export async function saveJob(job) {
     alert('Failed to save job. Please try again.');
   }
 }
+
 
 
 

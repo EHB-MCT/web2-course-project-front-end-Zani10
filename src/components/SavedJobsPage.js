@@ -14,7 +14,7 @@ export default async function showSavedJobsPage() {
 
     const jobsHTML = savedJobs.map(job => {
       const logoUrl = getCompanyLogoUrl(job.company);
-      const postedDate = calculateDaysAgo(job.created);
+      const postedDate = calculateDaysAgo(job.created || job.created_at);
 
       return `
         <div class="job-card">
@@ -31,7 +31,7 @@ export default async function showSavedJobsPage() {
           </div>
           <div class="job-actions">
             <span>Posted ${postedDate}</span>
-            <button class="btn remove-button" data-id="${job._id}"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn remove-button" data-id="${job.jobId}"><i class="fas fa-trash-alt"></i></button>
           </div>
         </div>
       `;
@@ -61,3 +61,4 @@ export default async function showSavedJobsPage() {
     app.innerHTML = '<p>Error fetching saved jobs. Please try again later.</p>';
   }
 }
+
