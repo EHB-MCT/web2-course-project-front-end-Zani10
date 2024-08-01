@@ -365,40 +365,90 @@ nav ul li a {
 
 .profile-container {
   max-width: 600px;
-  margin: 50px auto;
+  margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
+  background-color: #ffffff;
   border-radius: 8px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.profile-container h2 {
-  text-align: center;
-  margin-bottom: 20px;
+.profile-form {
+  display: flex;
+  flex-direction: column;
 }
 
-.profile-details {
-  margin-bottom: 20px;
+.profile-form-group {
+  margin-bottom: 15px;
 }
 
-.profile-details p {
-  margin: 10px 0;
+.profile-form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
 }
 
-.profile-container button {
+.profile-form-group input {
   width: 100%;
-  padding: 10px;
-  background-color: #286DB1;
-  color: white;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.profile-cv-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-cv-preview {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.profile-cv-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.profile-cv-upload {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-cv-upload input {
+  margin-bottom: 10px;
+}
+
+.profile-form-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
 }
 
-.profile-container button:hover {
-  background-color: #1b4b7a;
+.profile-btn:hover {
+  background-color: #0056b3;
 }
+
+.profile-btn.profile-logout-button {
+  background-color: #dc3545;
+}
+
+.profile-btn.profile-logout-button:hover {
+  background-color: #c82333;
+}
+
 
 .saved-jobs-container {
   max-width: 800px;
@@ -504,4 +554,38 @@ nav ul li a {
 
 .saved-jobs-container .job-card .btn.saved i {
   color: #e74c3c;
+}
+
+/* Notification styles */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification {
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 16px;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.notification.info {
+  background-color: #3498db;
+}
+
+.notification.success {
+  background-color: #2ecc71;
+}
+
+.notification.error {
+  background-color: #e74c3c;
+}
+
+.notification.remove {
+  background-color: #f39c12;
 }

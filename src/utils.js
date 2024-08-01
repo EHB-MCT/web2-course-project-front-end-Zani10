@@ -6,6 +6,7 @@ import showProfilePage from './components/ProfilePage';
 import showLoginPage from './components/LoginPage';
 import showRegisterPage from './components/RegisterPage';
 import logoutUser from './components/LogoutUser';
+import { showNotification } from './components/notifications';
 
 export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
@@ -62,14 +63,12 @@ export function displayJobs(jobs, containerId) {
   });
 }
 
-
 export function getCompanyLogoUrl(companyName) {
   if (typeof companyName !== 'string') return 'path/to/default-image.png'; // Ensure there's a fallback for default image
   const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
   const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
   return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
 }
-
 
 export function calculateDaysAgo(dateString) {
   const datePosted = new Date(dateString);
@@ -152,15 +151,12 @@ export async function saveJob(job) {
       throw new Error('Failed to save job');
     }
 
-    alert('Job saved successfully');
+    showNotification('Job saved successfully!', 'success');
   } catch (error) {
     console.error('Error saving job:', error);
-    alert('Failed to save job. Please try again.');
+    showNotification('Failed to save job. Please try again.', 'error');
   }
 }
-
-
-
 
 export async function getSavedJobs() {
   const token = localStorage.getItem('token');
@@ -207,10 +203,10 @@ export async function removeSavedJob(jobId) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    console.log('Job removed successfully');
+    showNotification('Job unsaved successfully!', 'remove');
   } catch (error) {
     console.error('Error removing saved job:', error);
-    throw error;
+    showNotification('Failed to remove job. Please try again.', 'error');
   }
 }
 
@@ -252,7 +248,6 @@ export async function registerUser(name, email, password) {
   }
 }
 
-
 export function isAuthenticated() {
   const token = localStorage.getItem('token');
   return !!token;
@@ -275,6 +270,64 @@ export async function getUserProfile() {
     }
     const data = await response.json();
     return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+
+export async function updateUserProfile(profileData) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    navigateTo('login');
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:4000/api/users/profile', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(profileData),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update profile');
+    }
+
+    showNotification('Profile updated successfully!', 'success');
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    showNotification('Failed to update profile. Please try again.', 'error');
+  }
+}
+
+export async function uploadUserCV(cvFile) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No token, authorization denied');
+  }
+
+  const formData = new FormData();
+  formData.append('cv', cvFile);
+
+  try {
+    const response = await fetch('http://localhost:4000/api/users/upload-cv', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to upload CV');
+    }
+
+    const data = await response.json();
+    showNotification('CV uploaded successfully!', 'success');
+    return data.filePath;
   } catch (error) {
     throw new Error(error.message);
   }
