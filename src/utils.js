@@ -11,13 +11,15 @@ export function displayJobs(jobs, containerId) {
   const jobsContainer = document.getElementById(containerId);
   jobsContainer.innerHTML = '';
   jobs.forEach(job => {
-    const jobCard = document.createElement('div');
-    jobCard.className = 'job-card';
+    const jobId = job.id || job.jobId; // Ensure jobId is included
     const company = job.company.display_name || job.company || 'Not available';
     const location = job.location.display_name || job.location || 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
     const description = job.description || 'No description available';
     const postedDate = job.created || job.created_at ? calculateDaysAgo(job.created || job.created_at) : 'Not available';
+
+    const jobCard = document.createElement('div');
+    jobCard.className = 'job-card';
 
     jobCard.innerHTML = `
       <div class="job-header">
@@ -33,9 +35,10 @@ export function displayJobs(jobs, containerId) {
       </div>
       <div class="job-actions">
         <span>Posted ${postedDate}</span>
-        <button class="btn save-button"><i class="far fa-heart"></i></button>
+        <button class="btn save-button" data-job-id="${jobId}"><i class="far fa-heart"></i></button>
       </div>
     `;
+
     jobCard.addEventListener('click', () => {
       navigateTo('job-details', { job, logoUrl });
     });
@@ -43,7 +46,14 @@ export function displayJobs(jobs, containerId) {
     const saveButton = jobCard.querySelector('.save-button');
     saveButton.addEventListener('click', (event) => {
       event.stopPropagation();
-      saveJob(job);
+      saveJob({
+        id: jobId,
+        title: job.title,
+        company: job.company.display_name || job.company,
+        location: job.location.display_name || job.location,
+        description: job.description,
+        created: job.created || job.created_at
+      });
       saveButton.querySelector('i').classList.toggle('fas');
       saveButton.querySelector('i').classList.toggle('far');
     });
@@ -51,6 +61,7 @@ export function displayJobs(jobs, containerId) {
     jobsContainer.appendChild(jobCard);
   });
 }
+
 
 export function getCompanyLogoUrl(companyName) {
   if (typeof companyName !== 'string') return 'path/to/default-image.png'; // Ensure there's a fallback for default image
@@ -119,7 +130,7 @@ export async function saveJob(job) {
   }
 
   const jobToSave = {
-    jobId: job.id,
+    jobId: job.id || job.jobId, // Adjust to ensure jobId is included
     title: job.title,
     company: job.company.display_name || job.company,
     location: job.location.display_name || job.location,
@@ -147,6 +158,7 @@ export async function saveJob(job) {
     alert('Failed to save job. Please try again.');
   }
 }
+
 
 
 export async function getSavedJobs() {
