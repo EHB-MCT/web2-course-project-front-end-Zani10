@@ -53,13 +53,14 @@ export function displayJobs(jobs, containerId) {
 }
 
 export function getCompanyLogoUrl(companyName) {
-  if (typeof companyName !== 'string') return '';
+  if (typeof companyName !== 'string') return 'path/to/default-image.png'; // Ensure there's a fallback for default image
   const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';
   const companyNameFormatted = companyName.toLowerCase().replace(/\s+/g, '');
   return `https://img.logo.dev/${companyNameFormatted}.com?token=${apiKey}&size=200&format=png`;
 }
 
-function calculateDaysAgo(dateString) {
+
+export function calculateDaysAgo(dateString) {
   const datePosted = new Date(dateString);
   const today = new Date();
   const differenceInTime = today - datePosted;
@@ -117,6 +118,15 @@ export async function saveJob(job) {
     return;
   }
 
+  const jobToSave = {
+    jobId: job.id,
+    title: job.title,
+    company: job.company.display_name || job.company,
+    location: job.location.display_name || job.location,
+    description: job.description,
+    created: job.created || new Date().toISOString() // Ensure the created date is set
+  };
+
   try {
     const response = await fetch('http://localhost:4000/api/users/saved-jobs', {
       method: 'POST',
@@ -124,7 +134,7 @@ export async function saveJob(job) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(job),
+      body: JSON.stringify(jobToSave),
     });
 
     if (!response.ok) {
@@ -137,6 +147,7 @@ export async function saveJob(job) {
     alert('Failed to save job. Please try again.');
   }
 }
+
 
 export async function getSavedJobs() {
   const token = localStorage.getItem('token');
@@ -164,6 +175,7 @@ export async function getSavedJobs() {
 }
 
 export async function removeSavedJob(jobId) {
+  console.log(`Removing job with ID: ${jobId}`);
   const token = localStorage.getItem('token');
   if (!token) {
     throw new Error('No token, authorization denied');
@@ -173,15 +185,19 @@ export async function removeSavedJob(jobId) {
     const response = await fetch(`http://localhost:4000/api/users/saved-jobs/${jobId}`, {
       method: 'DELETE',
       headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     });
 
     if (!response.ok) {
-      throw new Error('Failed to remove saved job');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+
+    console.log('Job removed successfully');
   } catch (error) {
-    throw new Error(error.message);
+    console.error('Error removing saved job:', error);
+    throw error;
   }
 }
 
@@ -222,6 +238,7 @@ export async function registerUser(name, email, password) {
     throw new Error('Registration failed');
   }
 }
+
 
 export function isAuthenticated() {
   const token = localStorage.getItem('token');

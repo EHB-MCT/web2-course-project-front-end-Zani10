@@ -1,4 +1,4 @@
-import { getSavedJobs } from '../utils';
+import { getSavedJobs, getCompanyLogoUrl, calculateDaysAgo, removeSavedJob } from '../utils';
 
 export default async function showSavedJobsPage() {
   console.log('Showing saved jobs page');
@@ -12,25 +12,30 @@ export default async function showSavedJobsPage() {
       return;
     }
 
-    const jobsHTML = savedJobs.map(job => `
-      <div class="job-card">
-        <div class="job-header">
-          <h3>${job.title}</h3>
-          <img src="${job.logoUrl}" alt="Company Logo" class="company-logo">
+    const jobsHTML = savedJobs.map(job => {
+      const logoUrl = getCompanyLogoUrl(job.company);
+      const postedDate = calculateDaysAgo(job.created);
+
+      return `
+        <div class="job-card">
+          <div class="job-header">
+            <h3>${job.title}</h3>
+            <img src="${logoUrl}" alt="Company Logo" class="company-logo">
+          </div>
+          <div class="job-info">
+            <div class="job-info-item"><i class="fas fa-building"></i>${job.company}</div>
+            <div class="job-info-item"><i class="fas fa-map-marker-alt"></i>${job.location}</div>
+          </div>
+          <div class="job-description">
+            <p>${job.description}</p>
+          </div>
+          <div class="job-actions">
+            <span>Posted ${postedDate}</span>
+            <button class="btn remove-button" data-id="${job._id}"><i class="fas fa-trash-alt"></i></button>
+          </div>
         </div>
-        <div class="job-info">
-          <div class="job-info-item"><i class="fas fa-building"></i>${job.company}</div>
-          <div class="job-info-item"><i class="fas fa-map-marker-alt"></i>${job.location}</div>
-        </div>
-        <div class="job-description">
-          <p>${job.description}</p>
-        </div>
-        <div class="job-actions">
-          <span>Posted ${job.postedDate}</span>
-          <button class="btn remove-button" data-id="${job.id}"><i class="fas fa-trash-alt"></i></button>
-        </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
 
     app.innerHTML = `
       <div class="saved-jobs-container">
@@ -41,9 +46,14 @@ export default async function showSavedJobsPage() {
 
     document.querySelectorAll('.remove-button').forEach(button => {
       button.addEventListener('click', async (event) => {
-        const jobId = event.target.getAttribute('data-id');
-        await removeSavedJob(jobId);
-        showSavedJobsPage();
+        const jobId = event.currentTarget.getAttribute('data-id');
+        console.log(`Button clicked to remove job with ID: ${jobId}`);
+        try {
+          await removeSavedJob(jobId);
+          showSavedJobsPage(); // Refresh the saved jobs list
+        } catch (error) {
+          console.error('Failed to remove saved job:', error);
+        }
       });
     });
   } catch (error) {

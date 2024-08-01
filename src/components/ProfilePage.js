@@ -5,25 +5,26 @@ export default async function showProfilePage() {
   const app = document.getElementById('app');
   if (!app) return;
 
-  const isAuthenticated = !!localStorage.getItem('token');
-  if (!isAuthenticated) {
-    console.log('User is not authenticated. Redirecting to login page.');
-    navigateTo('login');
-    return;
-  }
-
   try {
     const userProfile = await getUserProfile();
+    if (!userProfile) {
+      navigateTo('login'); // Redirect to login page if userProfile is null
+      return;
+    }
+
     app.innerHTML = `
       <div class="profile-container">
         <h2>Profile</h2>
-        <p><strong>Name:</strong> ${userProfile.name}</p>
-        <p><strong>Email:</strong> ${userProfile.email}</p>
-        <button id="logout-button">Logout</button>
+        <div class="profile-info">
+          <p><strong>Name:</strong> ${userProfile.name}</p>
+          <p><strong>Email:</strong> ${userProfile.email}</p>
+          <p><strong>Member since:</strong> ${new Date(userProfile.createdAt).toLocaleDateString()}</p>
+          <button class="btn logout-button">Logout</button>
+        </div>
       </div>
     `;
 
-    document.getElementById('logout-button').addEventListener('click', () => {
+    document.querySelector('.logout-button').addEventListener('click', () => {
       localStorage.removeItem('token');
       navigateTo('login');
     });
