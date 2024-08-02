@@ -142,16 +142,12 @@ nav ul li a {
 }
 
 .homepage-job-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  width: calc(45% - 10px); /* Two cards per row */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
+  width: 500px !important;
+}
+
+.homepage-title {
+  margin-left: 8.4em;
+  margin-bottom: 0;
 }
 
 .job-card {
@@ -159,12 +155,92 @@ nav ul li a {
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  width: calc(100% - 20px); /* Full width for other pages */
+  width: calc(80% - 20px); 
+  max-width: 700px; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
+  gap: 10px;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.company-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.job-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Add spacing between job info items */
+}
+
+.job-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.job-description {
+  margin-top: 10px;
+}
+
+.job-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-actions span {
+  font-size: 14px;
+  color: #888;
+}
+
+.btn {
+  background-color: #3498db;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+/* Browse Jobs Cards */
+.browse-jobs-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center; /* Center align the cards */
+}
+
+.browse-job-card {
+  width: calc(100% - 40px); /* Reduce the width */
+  max-width: 700px; /* Set a max width */
+  margin: 0 auto; /* Center align */
+}
+
+.search-message {
+  font-size: 18px;
+  font-weight: bold;
+  color: #444;
+  margin-left: 20.5em;
 }
 
 .job-card h3,
@@ -195,7 +271,7 @@ nav ul li a {
 .homepage-job-info {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 
 .job-info-item i,
@@ -362,7 +438,6 @@ nav ul li a {
   text-decoration: underline;
 }
 
-
 .profile-container {
   max-width: 600px;
   margin: 0 auto;
@@ -448,7 +523,6 @@ nav ul li a {
 .profile-btn.profile-logout-button:hover {
   background-color: #c82333;
 }
-
 
 .saved-jobs-container {
   max-width: 800px;

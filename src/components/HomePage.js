@@ -17,7 +17,7 @@ export default function showHomePage() {
       if (jobs.length === 0) {
         document.getElementById('homepage-featured-jobs').innerHTML = '<p>No featured jobs available</p>';
       } else {
-        displayJobs(jobs, 'homepage-featured-jobs');
+        displayJobs(jobs, 'homepage-featured-jobs', true); // Pass true to indicate these are featured jobs
       }
     })
     .catch(error => {

@@ -8,11 +8,11 @@ import showRegisterPage from './components/RegisterPage';
 import logoutUser from './components/LogoutUser';
 import { showNotification } from './components/notifications';
 
-export function displayJobs(jobs, containerId) {
+export function displayJobs(jobs, containerId, isFeatured = false) {
   const jobsContainer = document.getElementById(containerId);
   jobsContainer.innerHTML = '';
   jobs.forEach(job => {
-    const jobId = job.id || job.jobId; // Ensure jobId is included
+    const jobId = job.id || job.jobId;
     const company = job.company.display_name || job.company || 'Not available';
     const location = job.location.display_name || job.location || 'Not available';
     const logoUrl = getCompanyLogoUrl(company);
@@ -20,7 +20,7 @@ export function displayJobs(jobs, containerId) {
     const postedDate = job.created || job.created_at ? calculateDaysAgo(job.created || job.created_at) : 'Not available';
 
     const jobCard = document.createElement('div');
-    jobCard.className = 'job-card';
+    jobCard.className = isFeatured ? 'job-card homepage-job-card' : 'job-card browse-job-card';
 
     jobCard.innerHTML = `
       <div class="job-header">
