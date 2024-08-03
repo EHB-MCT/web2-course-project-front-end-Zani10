@@ -1,4 +1,4 @@
-import { saveJob } from '../utils';
+import { saveJob, fetchJobs, getCompanyLogoUrl, calculateDaysAgo } from '../utils';
 
 export default async function showJobDetailsPage(params) {
   console.log('Showing job details page');
@@ -7,23 +7,30 @@ export default async function showJobDetailsPage(params) {
     <div class="job-details-detailspage">
       <div class="job-header-detailspage">
         <img id="company-logo" class="company-logo-detailspage" src="" alt="Company Logo">
-        <h2 class="job-header-text-detailspage" id="job-title"></h2>
-      </div>
-      <div class="job-info-detailspage">
-        <div class="job-info-item-detailspage"><i class="fas fa-building"></i><p id="company-name"></p></div>
-        <div class="job-info-item-detailspage"><i class="fas fa-map-marker-alt"></i><p id="job-location"></p></div>
-        <div class="job-info-item-detailspage"><i class="fas fa-briefcase"></i><p id="job-type"></p></div>
-        <div class="job-info-item-detailspage"><i class="fas fa-calendar-alt"></i><p id="job-posted"></p></div>
+        <div>
+          <h2 class="job-header-text-detailspage" id="job-title"></h2>
+          <div class="job-info-container-detailspage">
+            <div class="job-info-detailspage">
+              <div class="job-info-item-detailspage"><i class="fas fa-building"></i><p id="company-name"></p></div>
+              <div class="job-info-item-detailspage"><i class="fas fa-map-marker-alt"></i><p id="job-location"></p></div>
+              <div class="job-info-item-detailspage"><i class="fas fa-briefcase"></i><p id="job-type"></p></div>
+              <div class="job-info-item-detailspage"><i class="fas fa-calendar-alt"></i><p id="job-posted"></p></div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="job-actions-detailspage">
-        <button id="interested-button" class="btn-interested-detailspage btn">I am interested </button>
+        <button id="interested-button" class="btn-interested-detailspage btn">I am interested</button>
         <button id="save-button" class="btn-saved-detailspage btn">Saved</button>
       </div>
       <div class="job-description-detailspage">
         <h3>Job Description</h3>
         <p id="job-description"></p>
       </div>
-      
+    </div>
+    <div class="similar-jobs-section">
+      <h3>Similar jobs</h3>
+      <div id="similar-jobs-container" class="similar-jobs-container"></div>
     </div>
   `;
 
@@ -68,12 +75,64 @@ export default async function showJobDetailsPage(params) {
   });
 
   localStorage.setItem(`job-${job.id}`, JSON.stringify(job));
+
+  fetchSimilarJobs(job.title);
 }
 
-function calculateDaysAgo(dateString) {
-  const datePosted = new Date(dateString);
-  const today = new Date();
-  const differenceInTime = today - datePosted;
-  const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
-  return `${differenceInDays} days ago`;
+async function fetchSimilarJobs(jobTitle) {
+  try {
+    const jobs = await fetchJobs({ what: jobTitle, similar: true });
+    console.log('Fetched similar jobs:', jobs);
+
+    // Filter to get 2 similar jobs from different companies
+    const uniqueCompanies = new Set();
+    const similarJobs = [];
+    for (const job of jobs) {
+      const companyName = job.company.display_name || job.company;
+      if (!uniqueCompanies.has(companyName)) {
+        uniqueCompanies.add(companyName);
+        similarJobs.push(job);
+      }
+      if (similarJobs.length >= 2) break;
+    }
+
+    displaySimilarJobs(similarJobs, 'similar-jobs-container');
+  } catch (error) {
+    console.error('Error fetching similar jobs:', error);
+    document.getElementById('similar-jobs-container').innerHTML = '<p>Error fetching similar jobs. Please try again later.</p>';
+  }
+}
+
+function displaySimilarJobs(jobs, containerId) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  jobs.forEach(job => {
+    const jobId = job.id || job.jobId;
+    const company = job.company.display_name || job.company || 'Not available';
+    const location = job.location.display_name || job.location || 'Not available';
+    const logoUrl = getCompanyLogoUrl(company);
+    const postedDate = job.created || job.created_at ? calculateDaysAgo(job.created || job.created_at) : 'Not available';
+
+    const jobCard = document.createElement('div');
+    jobCard.className = 'similar-job-card';
+    jobCard.innerHTML = `
+      <div class="similar-job-info">
+        <div class="similar-job-title">${job.title}</div>
+        <div class="similar-job-company-location">
+          <div class="similar-job-company"><i class="fas fa-building fas-similar-job"></i>${company}</div>
+          <div class="similar-job-location"><i class="fas fa-map-marker-alt fas-similar-job"></i>${location}</div>
+        </div>
+        <div class="similar-job-posted-save">
+          <div class="similar-job-posted">Posted ${postedDate}</div>
+        </div>
+      </div>
+      <img src="${logoUrl}" alt="Company Logo" class="similar-job-logo">
+    `;
+
+    jobCard.addEventListener('click', () => {
+      navigateTo('job-details', { job, logoUrl });
+    });
+
+    container.appendChild(jobCard);
+  });
 }
