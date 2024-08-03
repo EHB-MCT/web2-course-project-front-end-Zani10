@@ -4,31 +4,32 @@ export default async function showJobDetailsPage(params) {
   console.log('Showing job details page');
   const app = document.getElementById('app');
   app.innerHTML = `
-    <div class="job-details">
-      <div class="job-header">
-        <img id="company-logo" class="company-logo" src="" alt="Company Logo">
-        <h2 id="job-title"></h2>
+    <div class="job-details-detailspage">
+      <div class="job-header-detailspage">
+        <img id="company-logo" class="company-logo-detailspage" src="" alt="Company Logo">
+        <h2 class="job-header-text-detailspage" id="job-title"></h2>
       </div>
-      <div class="job-info">
-        <div class="job-info-item"><i class="fas fa-building"></i><p id="company-name"></p></div>
-        <div class="job-info-item"><i class="fas fa-map-marker-alt"></i><p id="job-location"></p></div>
-        <div class="job-info-item"><i class="fas fa-briefcase"></i><p id="job-type"></p></div>
-        <div class="job-info-item"><i class="fas fa-calendar-alt"></i><p id="job-posted"></p></div>
+      <div class="job-info-detailspage">
+        <div class="job-info-item-detailspage"><i class="fas fa-building"></i><p id="company-name"></p></div>
+        <div class="job-info-item-detailspage"><i class="fas fa-map-marker-alt"></i><p id="job-location"></p></div>
+        <div class="job-info-item-detailspage"><i class="fas fa-briefcase"></i><p id="job-type"></p></div>
+        <div class="job-info-item-detailspage"><i class="fas fa-calendar-alt"></i><p id="job-posted"></p></div>
       </div>
-      <div class="job-actions">
-        <button id="interested-button" class="btn">I am interested</button>
-        <button id="save-button" class="btn saved">Saved</button>
+      <div class="job-actions-detailspage">
+        <button id="interested-button" class="btn-interested-detailspage btn">I am interested </button>
+        <button id="save-button" class="btn-saved-detailspage btn">Saved</button>
       </div>
-      <div class="job-description">
+      <div class="job-description-detailspage">
         <h3>Job Description</h3>
         <p id="job-description"></p>
       </div>
+      
     </div>
   `;
 
   let job = params.job;
   const logoUrl = params.logoUrl;
-  
+
   if (!job) {
     console.error('Job details not found');
     return;
@@ -76,4 +77,3 @@ function calculateDaysAgo(dateString) {
   const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
   return `${differenceInDays} days ago`;
 }
-

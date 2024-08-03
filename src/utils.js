@@ -63,6 +63,62 @@ export function displayJobs(jobs, containerId, isFeatured = false) {
   });
 }
 
+export function displayFeaturedJobs(jobs, containerId) {
+  const jobsContainer = document.getElementById(containerId);
+  jobsContainer.innerHTML = '';
+  jobs.forEach(job => {
+    const jobId = job.id || job.jobId;
+    const company = job.company.display_name || job.company || 'Not available';
+    const location = job.location.display_name || job.location || 'Not available';
+    const logoUrl = getCompanyLogoUrl(company);
+    const description = job.description || 'No description available';
+    const postedDate = job.created || job.created_at ? calculateDaysAgo(job.created || job.created_at) : 'Not available';
+
+    const jobCard = document.createElement('div');
+    jobCard.className = 'featured-job-card';
+
+    jobCard.innerHTML = `
+      <div class="featured-job-header">
+        <h3>${job.title}</h3>
+        <img src="${logoUrl}" alt="Company Logo" class="featured-company-logo">
+      </div>
+      <div class="featured-job-info">
+        <div class="featured-job-info-item"><i class="fas fa-building"></i>${company}</div>
+        <div class="featured-job-info-item"><i class="fas fa-map-marker-alt"></i>${location}</div>
+      </div>
+      <div class="featured-job-description">
+        <p>${description}</p>
+      </div>
+      <div class="featured-job-actions">
+        <span>Posted ${postedDate}</span>
+        <button class="btn save-button" data-job-id="${jobId}"><i class="far fa-heart"></i></button>
+      </div>
+    `;
+
+    jobCard.addEventListener('click', () => {
+      navigateTo('job-details', { job, logoUrl });
+    });
+
+    const saveButton = jobCard.querySelector('.save-button');
+    saveButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      saveJob({
+        id: jobId,
+        title: job.title,
+        company: job.company.display_name || job.company,
+        location: job.location.display_name || job.location,
+        description: job.description,
+        created: job.created || job.created_at
+      });
+      saveButton.querySelector('i').classList.toggle('fas');
+      saveButton.querySelector('i').classList.toggle('far');
+    });
+
+    jobsContainer.appendChild(jobCard);
+  });
+}
+
+
 export function getCompanyLogoUrl(companyName) {
   if (typeof companyName !== 'string') return 'path/to/default-image.png'; // Ensure there's a fallback for default image
   const apiKey = 'pk_fMS1bC3BQwG26u8Ev8j_QA';

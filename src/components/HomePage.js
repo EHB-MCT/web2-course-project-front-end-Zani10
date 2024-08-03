@@ -1,4 +1,4 @@
-import { fetchJobs, displayJobs, navigateTo } from '../utils';
+import { fetchJobs, displayFeaturedJobs, navigateTo } from '../utils';
 
 export default function showHomePage() {
   console.log('Showing home page');
@@ -17,7 +17,7 @@ export default function showHomePage() {
       if (jobs.length === 0) {
         document.getElementById('homepage-featured-jobs').innerHTML = '<p>No featured jobs available</p>';
       } else {
-        displayJobs(jobs, 'homepage-featured-jobs', true); // Pass true to indicate these are featured jobs
+        displayFeaturedJobs(jobs, 'homepage-featured-jobs');
       }
     })
     .catch(error => {
