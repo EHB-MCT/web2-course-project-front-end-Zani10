@@ -6,6 +6,15 @@ body {
   background-color: #f4f4f4;
 }
 
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#app {
+  min-height: 100vh;
+}
+
 header {
   background-color: #286DB1;
   height: 150px;
@@ -949,3 +958,38 @@ nav ul li a {
 .notification.remove {
   background-color: #f39c12;
 }
+
+footer {
+  background-color: #286DB1;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  position: relative;
+  width: 100%;
+}
+
+.footer-links {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
+
+.footer-copyright {
+  font-size: 0.9em;
+}
+
+/* Animation */
+.job-card.removing {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+

@@ -259,12 +259,22 @@ export async function removeSavedJob(jobId) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
+    // Animation before removing the job card from the DOM
+    const jobCard = document.querySelector(`.job-card[data-job-id="${jobId}"]`);
+    if (jobCard) {
+      jobCard.classList.add('removing');
+      setTimeout(() => {
+        jobCard.remove();
+      }, 300); // Match this duration with your CSS animation duration
+    }
+
     showNotification('Job unsaved successfully!', 'remove');
   } catch (error) {
     console.error('Error removing saved job:', error);
     showNotification('Failed to remove job. Please try again.', 'error');
   }
 }
+
 
 export async function loginUser(email, password) {
   try {

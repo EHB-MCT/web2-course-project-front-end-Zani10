@@ -12,12 +12,15 @@ export default async function showSavedJobsPage() {
       return;
     }
 
+    // Reverse the order of saved jobs
+    savedJobs.reverse();
+
     const jobsHTML = savedJobs.map(job => {
       const logoUrl = getCompanyLogoUrl(job.company);
       const postedDate = calculateDaysAgo(job.created || job.created_at);
 
       return `
-        <div class="job-card">
+        <div class="job-card" data-job-id="${job.jobId}">
           <div class="job-header">
             <h3>${job.title}</h3>
             <img src="${logoUrl}" alt="Company Logo" class="company-logo">
@@ -50,7 +53,6 @@ export default async function showSavedJobsPage() {
         console.log(`Button clicked to remove job with ID: ${jobId}`);
         try {
           await removeSavedJob(jobId);
-          showSavedJobsPage(); // Refresh the saved jobs list
         } catch (error) {
           console.error('Failed to remove saved job:', error);
         }
@@ -61,4 +63,3 @@ export default async function showSavedJobsPage() {
     app.innerHTML = '<p>Error fetching saved jobs. Please try again later.</p>';
   }
 }
-
