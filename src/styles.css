@@ -321,9 +321,11 @@ nav ul li a {
 
 /* Ensure the section-specific styles do not interfere with other sections */
 .job-details-detailspage {
-  max-width: 900px;
+  max-width: 800px;
   margin: 0 auto;
   background-color: white;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 #app:has(.job-details-detailspage) {
@@ -349,7 +351,10 @@ nav ul li a {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
+}
+
+.similar-jobs-section h3 {
+  margin-left: 17em;
 }
 
 .similar-job-info {
@@ -362,6 +367,17 @@ nav ul li a {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 1em;
+}
+
+.similar-job-company-location {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+
+.similar-job-company-location i {
+  color: #286DB1;
 }
 
 #similar-jobs-container {
@@ -386,10 +402,6 @@ nav ul li a {
 .similar-job-company i,
 .similar-job-posted i {
   margin-right: 5px;
-}
-
-.similar-job-company-location i {
-  color: #286DB1;
 }
 
 .similar-job-posted {
