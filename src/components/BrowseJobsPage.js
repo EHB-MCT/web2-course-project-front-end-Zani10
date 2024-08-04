@@ -34,8 +34,10 @@ export default async function showBrowseJobsPage(params) {
         </div>
       </div>
     </div>
-    <div id="search-message" class="search-message"></div>
-    <div id="browse-jobs" class="jobs-container"></div>
+    <div class="jobs-container">
+      <div id="search-message" class="search-message">20 results found</div>
+      <div id="browse-jobs" class="jobs-container"></div>
+    </div>
   `;
 
   document.querySelectorAll('.filter-option').forEach(button => {

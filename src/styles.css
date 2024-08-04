@@ -1006,6 +1006,25 @@ body, html {
   padding: 0;
 }
 
+/* Style the jobs container and center it horizontally */
+.jobs-container {
+  flex: 1;
+  max-width: 800px; /* Maximum width for the job cards container */
+  margin-left: 20px; /* Margin between filter and job cards container */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center job cards horizontally */
+  gap: 20px;
+}
+
+/* Style the search message */
+#search-message {
+  
+  text-align: center;
+  margin-bottom: 20px; /* Space between search message and job cards */
+}
+
+
 .filters-container {
   width: 300px;
   padding: 20px;
@@ -1050,14 +1069,6 @@ body, html {
   margin-top: 20px;
 }
 
-.jobs-container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
 .noUi-horizontal .noUi-handle {
   width: 20px;
   height: 20px;
@@ -1068,6 +1079,118 @@ body, html {
   height: 10px;
 }
 
+.footer-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
 
+.footer-page-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #286DB1;
+}
+
+.footer-page-container p {
+  font-size: 1em;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.footer-page-container ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.footer-page-container ul li {
+  margin-bottom: 10px;
+}
+
+.footer-page-container a {
+  color: #286DB1;
+  text-decoration: none;
+}
+
+.footer-page-container a:hover {
+  text-decoration: underline;
+}
+
+.contact-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-page-container form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-page-container label {
+  font-weight: bold;
+  color: #286DB1;
+}
+
+.contact-page-container input,
+.contact-page-container textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.contact-page-container button {
+  padding: 10px 20px;
+  background-color: #286DB1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-page-container button:hover {
+  background-color: #1b4b7a;
+}
+
+.about-page-container {
+  text-align: left;
+}
+
+.about-page-container .about-section {
+  margin-bottom: 20px;
+}
+
+.about-page-container .about-section h3 {
+  color: #286DB1;
+  margin-bottom: 10px;
+}
+
+.about-page-container .about-section p {
+  margin-bottom: 10px;
+}
+
+.terms-page-container,
+.privacy-page-container {
+  text-align: left;
+}
+
+.terms-page-container h3,
+.privacy-page-container h3 {
+  color: #286DB1;
+  margin-bottom: 10px;
+}
+
+.terms-page-container p,
+.privacy-page-container p {
+  margin-bottom: 15px;
+}
 
 
