@@ -139,7 +139,7 @@ nav ul li a {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding: 20px;
+  padding-top: 20px;
   justify-content: center;
 }
 
@@ -992,4 +992,82 @@ footer {
   transform: translateX(100%);
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+
+body, html {
+  height: 100%;
+  margin: 0;
+}
+
+#app.browse-jobs-page {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
+.filters-container {
+  width: 300px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #ddd;
+  background-color: white;
+}
+
+.filters-container h3 {
+  margin: 0 0 10px;
+  font-size: 1.2em;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filters-container .filter-options {
+  display: block;
+  margin-bottom: 20px;
+}
+
+.filters-container .filter-option {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filters-container .filter-option:hover,
+.filters-container .filter-option.selected {
+  background-color: #286DB1;
+  color: white;
+}
+
+.filters-container .filter-options #salary-slider {
+  margin-top: 20px;
+}
+
+.jobs-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.noUi-horizontal .noUi-handle {
+  width: 20px;
+  height: 20px;
+  top: -7px;
+}
+
+.noUi-horizontal {
+  height: 10px;
+}
+
+
+
 

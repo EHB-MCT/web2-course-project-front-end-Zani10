@@ -3,28 +3,32 @@ export default function createFilterComponent() {
     filterContainer.className = 'filters-container';
   
     filterContainer.innerHTML = `
-      <div class="filter-section">
-        <h3>Job type</h3>
-        <button class="filter-button">Accounting & Finance</button>
-        <button class="filter-button">IT Jobs</button>
-        <button class="filter-button">Customer Services</button>
-        <button class="filter-button">Engineering</button>
-        <button class="filter-button">HR & Recruitment</button>
-        <button class="filter-button">Healthcare & Nursing</button>
-        <button class="filter-button">Creative & Design</button>
-        <button class="filter-button">Travel</button>
-        <button class="filter-button">Teaching</button>
-      </div>
-      <div class="filter-section">
-        <h3>Contract</h3>
-        <button class="filter-button">Full-Time</button>
-        <button class="filter-button">Part-Time</button>
-      </div>
-      <div class="filter-section">
-        <h3>Salary range</h3>
-        <input type="range" min="30000" max="90000" value="60000" class="salary-range">
-        <input type="range" min="30000" max="90000" value="90000" class="salary-range">
-      </div>
+        <div class="sidebar-filter">
+        <h3 class="filter-title" data-filter="job-type">Job type <i class="fas fa-chevron-down"></i></h3>
+        <div class="filter-options" data-filter="job-type">
+            <button class="filter-btn" data-type="accounting-finance">Accounting & Finance</button>
+            <button class="filter-btn" data-type="it-jobs">IT Jobs</button>
+            <button class="filter-btn" data-type="customer-services">Customer Services</button>
+            <button class="filter-btn" data-type="engineering">Engineering</button>
+            <button class="filter-btn" data-type="hr-recruitment">HR & Recruitment</button>
+            <button class="filter-btn" data-type="healthcare-nursing">Healthcare & Nursing</button>
+            <button class="filter-btn" data-type="creative-design">Creative & Design</button>
+            <button class="filter-btn" data-type="travel">Travel</button>
+            <button class="filter-btn" data-type="teaching">Teaching</button>
+        </div>
+
+        <h3 class="filter-title" data-filter="contract">Contract <i class="fas fa-chevron-down"></i></h3>
+        <div class="filter-options" data-filter="contract">
+            <button class="filter-btn" data-type="full-time">Full-Time</button>
+            <button class="filter-btn" data-type="part-time">Part-Time</button>
+        </div>
+
+        <h3 class="filter-title" data-filter="salary-range">Salary range <i class="fas fa-chevron-down"></i></h3>
+        <div class="filter-options" data-filter="salary-range">
+            <div id="salary-range-container"></div>
+            <p id="salary-range-values">30k - 90k</p>
+        </div>
+        </div>
     `;
   
     filterContainer.querySelectorAll('.filter-button').forEach(button => {
