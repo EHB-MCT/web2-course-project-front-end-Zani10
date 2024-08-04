@@ -12,9 +12,6 @@ export default async function showSavedJobsPage() {
       return;
     }
 
-    // Reverse the order of saved jobs
-    savedJobs.reverse();
-
     const jobsHTML = savedJobs.map(job => {
       const logoUrl = getCompanyLogoUrl(job.company);
       const postedDate = calculateDaysAgo(job.created || job.created_at);
