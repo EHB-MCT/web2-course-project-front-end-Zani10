@@ -1198,3 +1198,22 @@ body, html {
   margin-bottom: 15px;
 }
 
+/* Filter styling */
+.filter-heading {
+  margin-top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.apply-button {
+  padding: 8px 12px;
+  background-color: #0056b3;
+  color: white;
+  width: 8rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.apply-button:hover {
+  background-color: #0e5199;
+}

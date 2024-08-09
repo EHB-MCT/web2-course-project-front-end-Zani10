@@ -1,13 +1,15 @@
-import { fetchJobs, displayJobs } from '../utils';
+import { fetchJobs, displayJobs } from "../utils";
 
 export default async function showBrowseJobsPage(params) {
-  console.log('Showing browse jobs page');
-  const app = document.getElementById('app');
-  app.classList.add('browse-jobs-page');
+  console.log("Showing browse jobs page");
+  const app = document.getElementById("app");
+  app.classList.add("browse-jobs-page");
   app.innerHTML = `
     <div class="filters-container">
+      <h2 class="filter-heading">Filters  <button id="apply-filters" class="apply-button">Apply</button> <!-- Added Apply Button --></h2>
+
       <div class="filter-section">
-        <h3>Job type <i class="fas fa-chevron-up"></i></h3>
+        <h3>Job type<i class="fas fa-chevron-up"></i></h3>
         <div class="filter-options">
           <button class="filter-option" data-type="Accounting & Finance">Accounting & Finance</button>
           <button class="filter-option" data-type="IT Jobs">IT Jobs</button>
@@ -19,6 +21,7 @@ export default async function showBrowseJobsPage(params) {
           <button class="filter-option" data-type="Travel">Travel</button>
           <button class="filter-option" data-type="Teaching">Teaching</button>
         </div>
+
       </div>
       <div class="filter-section">
         <h3>Contract <i class="fas fa-chevron-up"></i></h3>
@@ -40,29 +43,30 @@ export default async function showBrowseJobsPage(params) {
     </div>
   `;
 
-  document.querySelectorAll('.filter-option').forEach(button => {
-    button.addEventListener('click', () => {
-      button.classList.toggle('selected');
-      fetchAndDisplayJobs();
+  document.querySelectorAll(".filter-option").forEach((button) => {
+    button.addEventListener("click", () => {
+      button.classList.toggle("selected");
+      // fetchAndDisplayJobs();
     });
   });
 
-  document.querySelectorAll('.filter-section h3').forEach(section => {
-    section.addEventListener('click', () => {
+  document.querySelectorAll(".filter-section h3").forEach((section) => {
+    section.addEventListener("click", () => {
       const options = section.nextElementSibling;
-      options.style.display = options.style.display === 'none' ? 'block' : 'none';
-      section.querySelector('i').classList.toggle('fa-chevron-up');
-      section.querySelector('i').classList.toggle('fa-chevron-down');
+      options.style.display =
+        options.style.display === "none" ? "block" : "none";
+      section.querySelector("i").classList.toggle("fa-chevron-up");
+      section.querySelector("i").classList.toggle("fa-chevron-down");
     });
   });
 
-  const salarySlider = document.getElementById('salary-slider');
+  const salarySlider = document.getElementById("salary-slider");
   noUiSlider.create(salarySlider, {
     start: [30000, 90000],
     connect: true,
     range: {
-      'min': 0,
-      'max': 100000
+      "min": 0,
+      "max": 100000,
     },
     tooltips: [true, true],
     format: {
@@ -71,33 +75,49 @@ export default async function showBrowseJobsPage(params) {
       },
       from: function (value) {
         return Number(value);
-      }
-    }
+      },
+    },
   });
 
-  salarySlider.noUiSlider.on('change', fetchAndDisplayJobs);
+  // salarySlider.noUiSlider.on("change", fetchAndDisplayJobs);
+  document
+    .getElementById("apply-filters")
+    .addEventListener("click", fetchAndDisplayJobs);
 
   async function fetchAndDisplayJobs() {
-    const selectedTypes = Array.from(document.querySelectorAll('.filter-option.selected[data-type]')).map(button => button.getAttribute('data-type'));
-    const selectedContracts = Array.from(document.querySelectorAll('.filter-option.selected[data-contract]')).map(button => button.getAttribute('data-contract'));
+    const selectedTypes = Array.from(
+      document.querySelectorAll(".filter-option.selected[data-type]")
+    ).map((button) => button.getAttribute("data-type"));
+    const selectedContracts = Array.from(
+      document.querySelectorAll(".filter-option.selected[data-contract]")
+    ).map((button) => button.getAttribute("data-contract"));
     const [minSalary, maxSalary] = salarySlider.noUiSlider.get();
 
+    console.log("jobtype", selectedTypes.join(","));
+    console.log("contract", selectedContracts.join());
+    console.log("minSalary", minSalary);
+    console.log("maxSalary", maxSalary);
+
     const params = {
-      types: selectedTypes.join(','),
-      contracts: selectedContracts.join(','),
+      types: selectedTypes.join(","),
+      full_time: selectedContracts.includes("Full-Time") ? "1" : "",
+      part_time: selectedContracts.includes("Part-Time") ? "1" : "",
       minSalary,
-      maxSalary
+      maxSalary,
     };
+    console.log("param", params);
 
     try {
       const jobs = await fetchJobs(params);
-      displayJobs(jobs, 'browse-jobs');
+      console.log("jobs", jobs);
+      displayJobs(jobs, "browse-jobs");
 
-      const searchMessage = document.getElementById('search-message');
+      const searchMessage = document.getElementById("search-message");
       searchMessage.innerHTML = `<p>${jobs.length} results found</p>`;
     } catch (error) {
-      console.error('Error fetching jobs:', error);
-      document.getElementById('browse-jobs').innerHTML = '<p>Error fetching jobs. Please try again later.</p>';
+      console.error("Error fetching jobs:", error);
+      document.getElementById("browse-jobs").innerHTML =
+        "<p>Error fetching jobs. Please try again later.</p>";
     }
   }
 
