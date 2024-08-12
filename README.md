@@ -74,6 +74,9 @@ If the project includes a login system, use the following credentials for testin
 - **Adzuna API**: Job posting API
   https://developer.adzuna.com/
   
+- **logo.dev**: Company images API
+  https://www.logo.dev/
+  
 - **Webpack**: Project config.
   https://canvas.ehb.be/courses/33607
   https://webpack.js.org/guides/getting-started/
