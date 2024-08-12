@@ -4,10 +4,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'docs'), 
     filename: 'bundle.js',
   },
-  mode: 'development', // Ensure this is set correctly
+  mode: 'production', 
   module: {
     rules: [
       {
@@ -28,10 +28,10 @@ module.exports = {
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, 'dist'),
+      directory: path.join(__dirname, 'docs'), 
     },
     compress: true,
     port: 3000,
-    historyApiFallback: true, // Ensures correct handling of client-side routing
+    historyApiFallback: true, 
   },
 };
