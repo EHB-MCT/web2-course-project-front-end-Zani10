@@ -21,11 +21,14 @@ export default function createNavBar(isHomePage) {
     </ul>
   `;
 
-  navBar.addEventListener('click', (event) => {
-    if (event.target.tagName === 'A' || event.target.closest('a')) {
+   navBar.addEventListener('click', (event) => {
+    const anchor = event.target.closest('a');
+    if (anchor) {
       event.preventDefault();
-      const page = event.target.getAttribute('data-page') || event.target.closest('a').getAttribute('data-page');
-      navigateTo(page);
+      const page = anchor.getAttribute('data-page');
+      if (page) {
+        navigateTo(page);
+      }
     }
   });
 
