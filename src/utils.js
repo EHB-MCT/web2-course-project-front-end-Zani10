@@ -1,6 +1,6 @@
 import showHomePage from "./components/HomePage";
 import showBrowseJobsPage from "./components/BrowseJobsPage";
-import showJobDetailsPage from "./components/JobDetailsPage";
+import showJobDetailsPage from "./components/jobDetailsPage";
 import showSavedJobsPage from "./components/SavedJobsPage";
 import showProfilePage from "./components/ProfilePage";
 import showLoginPage from "./components/LoginPage";
@@ -155,7 +155,7 @@ export async function fetchJobs(params = {}) {
     maxSalary: salary_max = 100000,
   } = params;
 
-  let query = "http://localhost:4000/api/jobs";
+  let query = "https://web2-course-project-back-end-zani10.onrender.com/api/jobs";
   // console.log("featured", featured);
   console.log("before", query);
   console.log("before time", full_time == "1");
@@ -232,7 +232,7 @@ export async function saveJob(job) {
   };
 
   try {
-    const response = await fetch("http://localhost:4000/api/users/saved-jobs", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/saved-jobs", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -259,7 +259,7 @@ export async function getSavedJobs() {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/api/users/saved-jobs", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/saved-jobs", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -286,7 +286,7 @@ export async function removeSavedJob(jobId) {
 
   try {
     const response = await fetch(
-      `http://localhost:4000/api/users/saved-jobs/${jobId}`,
+      `https://web2-course-project-back-end-zani10.onrender.com/api/users/saved-jobs/${jobId}`,
       {
         method: "DELETE",
         headers: {
@@ -318,7 +318,7 @@ export async function removeSavedJob(jobId) {
 
 export async function loginUser(email, password) {
   try {
-    const response = await fetch("http://localhost:4000/api/users/login", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -337,7 +337,7 @@ export async function loginUser(email, password) {
 
 export async function registerUser(name, email, password) {
   try {
-    const response = await fetch("http://localhost:4000/api/users/register", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -365,7 +365,7 @@ export async function getUserProfile() {
     throw new Error("No token, authorization denied");
   }
   try {
-    const response = await fetch("http://localhost:4000/api/users/profile", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/profile", {
       method: "GET",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -389,7 +389,7 @@ export async function updateUserProfile(profileData) {
   }
 
   try {
-    const response = await fetch("http://localhost:4000/api/users/profile", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/profile", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -419,7 +419,7 @@ export async function uploadUserCV(cvFile) {
   formData.append("cv", cvFile);
 
   try {
-    const response = await fetch("http://localhost:4000/api/users/upload-cv", {
+    const response = await fetch("https://web2-course-project-back-end-zani10.onrender.com/api/users/upload-cv", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
