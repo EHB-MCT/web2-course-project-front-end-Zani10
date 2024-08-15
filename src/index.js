@@ -2,7 +2,7 @@ import './styles.css';
 import { navigateTo, isAuthenticated } from './utils';
 import showHomePage from './components/HomePage';
 import showBrowseJobsPage from './components/BrowseJobsPage';
-import showJobDetailsPage from './components/JobDetailsPage';
+import showJobDetailsPage from './components/jobDetailsPage';
 import showSavedJobsPage from './components/SavedJobsPage';
 import showProfilePage from './components/ProfilePage';
 import showLoginPage from './components/LoginPage';
